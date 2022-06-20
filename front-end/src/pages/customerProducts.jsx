@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Fab } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 import Context from '../shared/contexts/Context';
-import NavBar from '../shared/components-pages/NavBar';
-import CardDrinks from '../shared/components-pages/CardDrinks';
+import NavBar from '../shared/components/NavBar';
+import CardDrinks from '../shared/components/CardDrinks';
 
 const style = {
   margin: 0,
@@ -19,6 +19,19 @@ export default function CustomerProducts() {
   const { disableCartButton, products, getTotalAmount } = useContext(Context);
   const navigate = useNavigate();
 
+  const user = localStorage.getItem('user');
+  let role = '';
+
+  if (user) {
+    role = JSON.parse(user).role;
+  }
+
+  useEffect(() => {
+    if (role === 'seller') {
+      navigate('../seller/orders');
+    }
+  }, [role, navigate]);
+
   function handleClick() {
     navigate('../customer/checkout', { replace: true });
   }
@@ -31,7 +44,6 @@ export default function CustomerProducts() {
       ))}
       <Fab
         variant="extended"
-        // sx={ { pr: 0.1, pb: 0.1, position: 'fixed' } }
         style={ style }
         data-testid="customer_products__button-cart"
         onClick={ () => handleClick() }

@@ -18,6 +18,28 @@ export const requestRegister = async ({ name, email, password, role = 'costumer'
   }
 };
 
+export const adminRequestRegister = async (body, token) => {
+  try {
+    const header = { headers: { authorization: token } };
+
+    const { data } = await apiConfig.post('/admin/register', body, header);
+    return data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const adminRequestDeleteUser = async (id, token) => {
+  try {
+    const header = { headers: { authorization: token } };
+
+    const { data } = await apiConfig.delete(`/admin/remove/${id}`, header);
+    return data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const getProducts = async () => {
   try {
     const { data } = await apiConfig.get('/products');
@@ -30,6 +52,15 @@ export const getProducts = async () => {
 export const getSellers = async () => {
   try {
     const { data } = await apiConfig.get('/seller');
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    const { data } = await apiConfig.get('/users');
     return data;
   } catch (error) {
     console.log(error);
@@ -100,4 +131,6 @@ export default {
   getOrderByUserId,
   setOrderStatusById,
   getOrderBySellerId,
+  getUsers,
+  adminRequestDeleteUser,
 };
